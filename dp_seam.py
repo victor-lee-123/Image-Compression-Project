@@ -361,8 +361,8 @@ def main():
     plt.axis("off")
 
     fig.tight_layout()
-    fig.savefig("result.png")
-    print("Saved result to result.png")
+    fig.savefig("result.jpg", format="jpg", dpi=300)
+    print("Saved result to result.jpg")
 
     try:
         plt.show()
