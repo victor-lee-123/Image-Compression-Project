@@ -1,147 +1,57 @@
 import numpy as np
-import cv2
+from energy import compute_energy
 
 
-# ----------------------------------------------------
-# ENERGY FUNCTION (SOBEL — HIGH QUALITY)
-# ----------------------------------------------------
-def compute_energy(img: np.ndarray) -> np.ndarray:
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+# ---------------------------------------------------------
+# VECTORIZED DP — FAST VERSION
+# ---------------------------------------------------------
 
-    sobel_x = cv2.Sobel(gray, cv2.CV_64F, 1, 0, ksize=3)
-    sobel_y = cv2.Sobel(gray, cv2.CV_64F, 0, 1, ksize=3)
-
-    energy = np.abs(sobel_x) + np.abs(sobel_y)
-    return energy
-
-
-# ----------------------------------------------------
-# DP SEAM FINDER (VERTICAL)
-# ----------------------------------------------------
-def vertical_seam_dp(energy: np.ndarray):
+def vertical_seam_dp(energy):
+    """
+    Fast vectorized DP algorithm.
+    Input:  energy (H, W)
+    Output: list of (row, col) seam positions.
+    """
     H, W = energy.shape
-    dp = energy.copy().astype(np.float64)
+
+    # dp table
+    dp = energy.astype(np.float64).copy()
     parent = np.zeros((H, W), dtype=np.int32)
 
     for r in range(1, H):
-        for c in range(W):
+        prev = dp[r - 1]
 
-            candidates = [dp[r - 1, c]]
+        # shift arrays for up-left, up, up-right
+        left  = np.roll(prev, 1)
+        right = np.roll(prev, -1)
+        middle = prev
 
-            if c > 0:
-                candidates.append(dp[r - 1, c - 1])
-            else:
-                candidates.append(np.inf)
+        # very important: invalidate wrapped edges
+        left[0] = np.inf
+        right[-1] = np.inf
 
-            if c < W - 1:
-                candidates.append(dp[r - 1, c + 1])
-            else:
-                candidates.append(np.inf)
+        # compute best parents
+        candidates = np.vstack([middle, left, right])
+        best = np.argmin(candidates, axis=0)
 
-            best = np.argmin(candidates)
+        # store parents
+        parent[r] = np.where(best == 0, np.arange(W),
+                      np.where(best == 1, np.arange(W) - 1,
+                                         np.arange(W) + 1))
 
-            if best == 0:
-                parent[r, c] = c
-            elif best == 1:
-                parent[r, c] = c - 1
-            else:
-                parent[r, c] = c + 1
+        # accumulate dp cost
+        dp[r] = energy[r] + candidates[best, np.arange(W)]
 
-            dp[r, c] += candidates[best]
-
+    # traceback (backwards)
     seam = []
     c = int(np.argmin(dp[-1]))
-
-    for r in reversed(range(H)):
+    for r in range(H - 1, -1, -1):
         seam.append((r, c))
         c = parent[r, c]
-
     seam.reverse()
     return seam
 
 
-# ----------------------------------------------------
-# DP SEAM FINDER (HORIZONTAL)
-# ----------------------------------------------------
-def horizontal_seam_dp(energy: np.ndarray):
+def horizontal_seam_dp(energy):
     seam_T = vertical_seam_dp(energy.T)
-    seam = [(c, r) for (r, c) in seam_T]
-    return seam
-
-
-# ----------------------------------------------------
-# REMOVE VERTICAL SEAM
-# ----------------------------------------------------
-def remove_vertical_seam(img: np.ndarray, seam):
-    H, W, C = img.shape
-    out = np.zeros((H, W - 1, C), dtype=img.dtype)
-
-    for (r, c) in seam:
-        out[r, :, :] = np.delete(img[r, :, :], c, axis=0)
-
-    return out
-
-
-# ----------------------------------------------------
-# REMOVE HORIZONTAL SEAM
-# ----------------------------------------------------
-def remove_horizontal_seam(img: np.ndarray, seam):
-    H, W, C = img.shape
-    out = np.zeros((H - 1, W, C), dtype=img.dtype)
-
-    for (r, c) in seam:
-        out[:, c, :] = np.delete(img[:, c, :], r, axis=0)
-
-    return out
-
-
-# ----------------------------------------------------
-# MULTIPLE SEAMS: VERTICAL
-# ----------------------------------------------------
-def carve_vertical_n(img: np.ndarray, n: int):
-    H, W, _ = img.shape
-    n = max(0, min(n, W - 1))  # safety clamp
-
-    for _ in range(n):
-        energy = compute_energy(img)
-        seam = vertical_seam_dp(energy)
-        img = remove_vertical_seam(img, seam)
-    return img
-
-
-# ----------------------------------------------------
-# MULTIPLE SEAMS: HORIZONTAL
-# ----------------------------------------------------
-def carve_horizontal_n(img: np.ndarray, n: int):
-    H, W, _ = img.shape
-    n = max(0, min(n, H - 1))  # safety clamp
-
-    for _ in range(n):
-        energy = compute_energy(img)
-        seam = horizontal_seam_dp(energy)
-        img = remove_horizontal_seam(img, seam)
-    return img
-
-
-# ----------------------------------------------------
-# RESIZE TO TARGET SIZE
-# ----------------------------------------------------
-def seam_carve_to_size(img: np.ndarray, new_h: int, new_w: int):
-    H, W, _ = img.shape
-
-    if new_w > W or new_h > H:
-        raise ValueError("New size must be <= original size for seam carving")
-
-    while W > new_w:
-        energy = compute_energy(img)
-        seam = vertical_seam_dp(energy)
-        img = remove_vertical_seam(img, seam)
-        H, W, _ = img.shape
-
-    while H > new_h:
-        energy = compute_energy(img)
-        seam = horizontal_seam_dp(energy)
-        img = remove_horizontal_seam(img, seam)
-        H, W, _ = img.shape
-
-    return img
+    return [(c, r) for (r, c) in seam_T]
