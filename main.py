@@ -5,8 +5,6 @@ import cv2
 from visualisation import (
     visualize_dp_seam,
     visualize_greedy_seam,
-    animate_dp_vertical,
-    animate_greedy_vertical,
     animate_resize_dp,
     animate_resize_greedy,
 )
@@ -29,9 +27,7 @@ def main():
         print("2. Resize using Greedy")
         print("3. Visualize next DP seam")
         print("4. Visualize next Greedy seam")
-        print("5. Animate DP vertical seam removal")
-        print("6. Animate Greedy vertical seam removal")
-        print("7. Exit")
+        print("5. Exit")
         choice = input("Enter option: ")
 
         if choice == "1":
@@ -67,14 +63,6 @@ def main():
             cv2.waitKey(0)
 
         elif choice == "5":
-            n = int(input("How many seams to animate (DP)? "))
-            animate_dp_vertical(img.copy(), n)
-
-        elif choice == "6":
-            n = int(input("How many seams to animate (Greedy)? "))
-            animate_greedy_vertical(img.copy(), n)
-
-        elif choice == "7":
             print("Exiting.")
             break
 
