@@ -42,7 +42,7 @@ def main():
             carved = animate_resize_dp(img.copy(), new_h, new_w, delay=10)
             cv2.imshow("Original", img)
             cv2.imshow("DP Resized", carved)
-            cv2.imwrite("dp_result.jpg", carved)
+            cv2.imwrite("test results/dp_result.jpg", carved)
             cv2.waitKey(0)
 
         elif choice == "2":
@@ -53,7 +53,7 @@ def main():
             carved = animate_resize_greedy(img.copy(), new_h, new_w, delay=10)
             cv2.imshow("Original", img)
             cv2.imshow("Greedy Resized", carved)
-            cv2.imwrite("greedy_result.jpg", carved)
+            cv2.imwrite("test results/greedy_result.jpg", carved)
             cv2.waitKey(0)
 
         elif choice == "3":

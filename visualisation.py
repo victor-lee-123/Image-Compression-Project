@@ -136,7 +136,7 @@ def animate_resize_dp(img, new_h, new_w, delay=10):
                          f"{elapsed:.2f}s elapsed | ETA {eta:.2f}s")
         sys.stdout.flush()
 
-    print("\nDP resizing completed!\n")
+    print("\nDP resizing completed! Result saved under test result folder\n")
     cv2.imshow("DP Final Resized", temp)
     cv2.waitKey(0)
     return temp
@@ -209,7 +209,7 @@ def animate_resize_greedy(img, new_h, new_w, delay=10):
                          f"{elapsed:.2f}s elapsed | ETA {eta:.2f}s")
         sys.stdout.flush()
 
-    print("\nGreedy resizing completed!\n")
+    print("\nGreedy resizing completed! Result saved under test result folder\n")
     cv2.imshow("Greedy Final Resized", temp)
     cv2.waitKey(0)
     return temp
