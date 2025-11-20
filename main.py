@@ -1,12 +1,11 @@
 import cv2
 
-# from resize_dp import seam_carve_to_size_dp
-# from resize_greedy import seam_carve_to_size_greedy
 from visualisation import (
     visualize_dp_seam,
     visualize_greedy_seam,
     animate_resize_dp,
     animate_resize_greedy,
+    show_energy_map
 )
 
 
@@ -27,7 +26,8 @@ def main():
         print("2. Resize using Greedy")
         print("3. Visualize next DP seam")
         print("4. Visualize next Greedy seam")
-        print("5. Exit")
+        print("5. Energy Map Visualisation")
+        print("6. Exit")
         choice = input("Enter option: ")
 
         if choice == "1":
@@ -63,6 +63,9 @@ def main():
             cv2.waitKey(0)
 
         elif choice == "5":
+            show_energy_map(img, "Energy Map")
+
+        elif choice == "6":
             print("Exiting.")
             break
 

@@ -180,3 +180,10 @@ def animate_resize_greedy(img, new_h, new_w, delay=10):
     cv2.imshow("Greedy Final Resized", temp)
     cv2.waitKey(0)
     return temp
+
+def show_energy_map(img, window_name="Energy Map"):
+    energy = compute_energy(img)
+    energy_img = (energy / energy.max() * 255).astype("uint8")
+    cv2.imshow(window_name, energy_img)
+    cv2.waitKey(0)
+    return energy_img
