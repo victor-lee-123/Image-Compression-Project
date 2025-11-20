@@ -1,21 +1,23 @@
 import cv2
 
-from resize_dp import seam_carve_to_size_dp
-from resize_greedy import seam_carve_to_size_greedy
+# from resize_dp import seam_carve_to_size_dp
+# from resize_greedy import seam_carve_to_size_greedy
 from visualisation import (
     visualize_dp_seam,
     visualize_greedy_seam,
     animate_dp_vertical,
     animate_greedy_vertical,
+    animate_resize_dp,
+    animate_resize_greedy,
 )
 
 
 def main():
-    img_path = "images/monke.jpg"  # change if needed
+    img_path = "images/test.jpg"  # change if needed
     img = cv2.imread(img_path)
 
     if img is None:
-        print(f"ERROR: Could not load image at {img_path}")
+        print(f"ERROR: Could not load image : {img_path}. Please check that an image is loaded inside the folder -> images/ and name is the same as img_path, then run the command again.")
         return
 
     H, W, _ = img.shape
@@ -37,7 +39,7 @@ def main():
             pct_h = float(input("Height % (e.g. 50): ")) / 100.0
             new_w = max(1, int(W * pct_w))
             new_h = max(1, int(H * pct_h))
-            carved = seam_carve_to_size_dp(img.copy(), new_h, new_w)
+            carved = animate_resize_dp(img.copy(), new_h, new_w, delay=10)
             cv2.imshow("Original", img)
             cv2.imshow("DP Resized", carved)
             cv2.imwrite("dp_result.jpg", carved)
@@ -48,7 +50,7 @@ def main():
             pct_h = float(input("Height % (e.g. 50): ")) / 100.0
             new_w = max(1, int(W * pct_w))
             new_h = max(1, int(H * pct_h))
-            carved = seam_carve_to_size_greedy(img.copy(), new_h, new_w)
+            carved = animate_resize_greedy(img.copy(), new_h, new_w, delay=10)
             cv2.imshow("Original", img)
             cv2.imshow("Greedy Resized", carved)
             cv2.imwrite("greedy_result.jpg", carved)

@@ -1,3 +1,6 @@
+import time
+import sys
+
 from energy import compute_energy
 from dp_seam import vertical_seam_dp, horizontal_seam_dp
 from seam_removal import remove_vertical_seam, remove_horizontal_seam
@@ -25,25 +28,36 @@ def carve_horizontal_n_dp(img, n: int):
     return img
 
 
-def seam_carve_to_size_dp(img, new_h: int, new_w: int):
-    """
-    Resize image to (new_h, new_w) using DP-based seam carving.
-    Assumes new_h <= H and new_w <= W.
-    """
+def seam_carve_to_size_dp(img, new_h, new_w):
     H, W, _ = img.shape
+    total_v = W - new_w
+    total_h = H - new_h
+    start = time.time()
 
-    # Adjust width first
-    while W > new_w:
+    # --- Vertical seams ---
+    for i in range(total_v):
         energy = compute_energy(img)
         seam = vertical_seam_dp(energy)
         img = remove_vertical_seam(img, seam)
-        H, W, _ = img.shape
 
-    # Then adjust height
-    while H > new_h:
+        elapsed = time.time() - start
+        progress = (i+1) / total_v * 100
+
+        sys.stdout.write(f"\rVertical seams: {i+1}/{total_v} ({progress:.1f}%) | {elapsed:.2f}s")
+        sys.stdout.flush()
+
+    # --- Horizontal seams ---
+    H, W, _ = img.shape
+    for i in range(total_h):
         energy = compute_energy(img)
         seam = horizontal_seam_dp(energy)
         img = remove_horizontal_seam(img, seam)
-        H, W, _ = img.shape
 
+        elapsed = time.time() - start
+        progress = (i+1) / total_h * 100
+
+        sys.stdout.write(f"\rHorizontal seams: {i+1}/{total_h} ({progress:.1f}%) | {elapsed:.2f}s")
+        sys.stdout.flush()
+
+    print()  # newline after completion
     return img
