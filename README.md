@@ -84,6 +84,6 @@ This implementation is modular, interactive, and optimized with vectorized DP fo
   - Edwin Leow
   - Jasper Ho
 
-#📝 License
+# 📝 License
 - Image Credits : Broadway Tower by Newton2 on Wikipedia
 - Licensing & Assignment Credits : Developed as part of Singapore Institute of Technology (SIT) Coursework. All Rights Reserved. Do not copy or distribute without permission.
