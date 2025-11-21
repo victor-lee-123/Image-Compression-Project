@@ -1,5 +1,5 @@
 # 📌 Seam Carving Image Resizing
-#Content-Aware Image Retargeting using Dynamic Programming and Greedy Algorithms
+Content-Aware Image Retargeting using Dynamic Programming and Greedy Algorithms.
 
 # 📖 Overview
 This project implements Seam Carving, a content-aware image resizing technique introduced by Avidan & Shamir (2007).
