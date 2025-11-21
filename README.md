@@ -1,7 +1,7 @@
-#📌 Seam Carving Image Resizing
+# 📌 Seam Carving Image Resizing
 #Content-Aware Image Retargeting using Dynamic Programming and Greedy Algorithms
 
-#📖 Overview
+# 📖 Overview
 This project implements Seam Carving, a content-aware image resizing technique introduced by Avidan & Shamir (2007).
 Instead of scaling or cropping, seam carving removes the least important pixels using:
 ✔ Dynamic Programming (DP) — globally optimal seams
@@ -15,7 +15,7 @@ Energy map visualization
 DP vs Greedy comparison tools
 This implementation is modular, interactive, and optimized with vectorized DP for high performance.
 
-#🚀 Features
+# 🚀 Features
 🔹 Seam carving algorithms
 - Dynamic Programming (optimal)
 - Greedy (fast but suboptimal)
@@ -38,16 +38,16 @@ This implementation is modular, interactive, and optimized with vectorized DP fo
 - Seam removal
 - DP/Greedy resizing
 
-#⚠️ NOTE : 
+# ⚠️ NOTE : 
 - Before running the program, ensure that you have installed Python and OpenCV. (pip install numpy opencv-python)
 - Ensure that you have included an image into the images folder and rename it to test.jpg (there is a sample castle image)
 
-#⭐HOW TO USE
+# ⭐HOW TO USE
 1. Open Command Prompt(cmd) in the project directory. (Alternatively, you can just type "cmd" on the page of the Windows Explorer)
 2. Once cmd is opened, type : python main.py and click enter.
 3. Done! You are now presented with a main menu with resizing options.
 
-#⭐WHAT DO THE OPTIONS DO?
+# ⭐WHAT DO THE OPTIONS DO?
 1. Resize using DP
    - Asks for width & height percentage
    - Uses Dynamic Programming seam carving
@@ -76,7 +76,7 @@ This implementation is modular, interactive, and optimized with vectorized DP fo
    - High energy → edges / important content
    - Low energy → background / removable areas
 
-#🙏SPECIAL THANKS
+# 🙏SPECIAL THANKS
 - Thank you to the fellow contributors and project mates for coming together to make this project work!
   - Muhammad Fakhrurazi
   - Jay Lim
