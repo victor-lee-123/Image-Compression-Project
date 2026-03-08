@@ -43,7 +43,7 @@ This implementation is modular, interactive, and optimized with vectorized DP fo
 - Ensure that you have included an image into the images folder and rename it to test.jpg (there is a sample castle image)
 
 # ⭐HOW TO USE
-1. Open Command Prompt(cmd) in the project directory. (Alternatively, you can just type "cmd" on the page of the Windows Explorer)
+1. Open Command Prompt(cmd) in the project directory. (Alternatively, you can just type "cmd" on the title bar of the Windows Explorer)
 2. Once cmd is opened, type : python main.py and click enter.
 3. Done! You are now presented with a main menu with resizing options.
 
